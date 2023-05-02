@@ -1,11 +1,10 @@
 from tkinter import *
 from enum import Enum
-from time import strftime
 import time
 import math
 
-ANALOG_WIDTH = 400
-ANALOG_HEIGHT = 400
+ANALOG_WIDTH = 500
+ANALOG_HEIGHT = 500
 
 
 class TimeFormat(Enum):
@@ -29,12 +28,12 @@ class TimeDisplay:
 
         # digital
         self.time_label: Label = Label(
-            root, font=("calibri", 50, "bold"), foreground="black"
+            root, font=("calibri", 80, "bold"), foreground="black"
         )
         self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         # analog
         self.time_canvas = Canvas(
-            root, width=ANALOG_WIDTH, height=ANALOG_HEIGHT, bg="white"
+            root, width=ANALOG_WIDTH, height=ANALOG_HEIGHT
         )
         self.time_canvas.place_forget()
 
@@ -63,9 +62,9 @@ class TimeDisplay:
             self.time_canvas.place_forget()
             self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
             if self.current_format == TimeFormat.Military_Time:
-                string = strftime("%H:%M:%S")
+                string = time.strftime("%H:%M:%S")
             else:
-                string = strftime("%I:%M:%S %p")
+                string = time.strftime("%I:%M:%S %p")
             self.time_label.config(
                 text=string, foreground=self.current_color.value
             )
@@ -85,7 +84,7 @@ class TimeDisplay:
 
         # Draw clock face
         self.time_canvas.create_oval(
-            2, 2, ANALOG_WIDTH, ANALOG_HEIGHT, outline="black", width=2
+            6, 6, ANALOG_WIDTH, ANALOG_HEIGHT, outline="black", width=2
         )
 
         # Draw hour numbers
