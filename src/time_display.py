@@ -4,8 +4,8 @@ from time import strftime
 import time
 import math
 
-ANALOG_WIDTH = 300
-ANALOG_HEIGHT = 300
+ANALOG_WIDTH = 400
+ANALOG_HEIGHT = 400
 
 
 class TimeFormat(Enum):
@@ -29,7 +29,7 @@ class TimeDisplay:
 
         # digital
         self.time_label: Label = Label(
-            root, font=("calibri", 40, "bold"), foreground="black"
+            root, font=("calibri", 50, "bold"), foreground="black"
         )
         self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
         # analog
@@ -61,6 +61,7 @@ class TimeDisplay:
             or self.current_format == TimeFormat.Standard_Time
         ):
             self.time_canvas.place_forget()
+            self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
             if self.current_format == TimeFormat.Military_Time:
                 string = strftime("%H:%M:%S")
             else:
@@ -69,6 +70,7 @@ class TimeDisplay:
                 text=string, foreground=self.current_color.value
             )
         else:
+            self.time_label.place_forget()
             self.time_canvas.place(relx=0.5, rely=0.5, anchor=CENTER)
             self.update_analog_clock()
 
