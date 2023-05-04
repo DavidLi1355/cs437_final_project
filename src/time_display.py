@@ -3,9 +3,6 @@ from enum import Enum
 import time
 import math
 
-ANALOG_WIDTH = 500
-ANALOG_HEIGHT = 500
-
 
 class TimeFormat(Enum):
     Military_Time = "Military Time"
@@ -22,6 +19,10 @@ class TimeColor(Enum):
 
 
 class TimeDisplay:
+    REL_Y = 0.4
+    ANALOG_WIDTH = 400
+    ANALOG_HEIGHT = 400
+
     def __init__(self, root: Tk) -> None:
         self.current_format = TimeFormat.Military_Time
         self.current_color = TimeColor.Black
@@ -30,10 +31,12 @@ class TimeDisplay:
         self.time_label: Label = Label(
             root, font=("calibri", 80, "bold"), foreground="black"
         )
-        self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.time_label.place(relx=0.5, rely=TimeDisplay.REL_Y, anchor=CENTER)
         # analog
         self.time_canvas = Canvas(
-            root, width=ANALOG_WIDTH, height=ANALOG_HEIGHT
+            root,
+            width=TimeDisplay.ANALOG_WIDTH,
+            height=TimeDisplay.ANALOG_HEIGHT,
         )
         self.time_canvas.place_forget()
 
@@ -60,7 +63,9 @@ class TimeDisplay:
             or self.current_format == TimeFormat.Standard_Time
         ):
             self.time_canvas.place_forget()
-            self.time_label.place(relx=0.5, rely=0.5, anchor=CENTER)
+            self.time_label.place(
+                relx=0.5, rely=TimeDisplay.REL_Y, anchor=CENTER
+            )
             if self.current_format == TimeFormat.Military_Time:
                 string = time.strftime("%H:%M:%S")
             else:
@@ -70,7 +75,9 @@ class TimeDisplay:
             )
         else:
             self.time_label.place_forget()
-            self.time_canvas.place(relx=0.5, rely=0.5, anchor=CENTER)
+            self.time_canvas.place(
+                relx=0.5, rely=TimeDisplay.REL_Y, anchor=CENTER
+            )
             self.update_analog_clock()
 
         self.time_label.after(1, self.get_time)
@@ -84,14 +91,25 @@ class TimeDisplay:
 
         # Draw clock face
         self.time_canvas.create_oval(
-            6, 6, ANALOG_WIDTH, ANALOG_HEIGHT, outline="black", width=2
+            6,
+            6,
+            TimeDisplay.ANALOG_WIDTH,
+            TimeDisplay.ANALOG_HEIGHT,
+            outline="black",
+            width=2,
         )
 
         # Draw hour numbers
         for i in range(12):
             angle = i * math.pi / 6 - math.pi / 2
-            x = ANALOG_WIDTH / 2 + 0.7 * ANALOG_WIDTH / 2 * math.cos(angle)
-            y = ANALOG_HEIGHT / 2 + 0.7 * ANALOG_WIDTH / 2 * math.sin(angle)
+            x = (
+                TimeDisplay.ANALOG_WIDTH / 2
+                + 0.7 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(angle)
+            )
+            y = (
+                TimeDisplay.ANALOG_HEIGHT / 2
+                + 0.7 * TimeDisplay.ANALOG_WIDTH / 2 * math.sin(angle)
+            )
             if i == 0:
                 self.time_canvas.create_text(
                     x, y - 10, text=str(i + 12), font=("Helvetica", 12)
@@ -104,10 +122,22 @@ class TimeDisplay:
         # Draw minute lines
         for i in range(60):
             angle = i * math.pi / 30 - math.pi / 2
-            x1 = ANALOG_WIDTH / 2 + 0.8 * ANALOG_WIDTH / 2 * math.cos(angle)
-            y1 = ANALOG_HEIGHT / 2 + 0.8 * ANALOG_HEIGHT / 2 * math.sin(angle)
-            x2 = ANALOG_WIDTH / 2 + 0.9 * ANALOG_WIDTH / 2 * math.cos(angle)
-            y2 = ANALOG_HEIGHT / 2 + 0.9 * ANALOG_HEIGHT / 2 * math.sin(angle)
+            x1 = (
+                TimeDisplay.ANALOG_WIDTH / 2
+                + 0.8 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(angle)
+            )
+            y1 = (
+                TimeDisplay.ANALOG_HEIGHT / 2
+                + 0.8 * TimeDisplay.ANALOG_HEIGHT / 2 * math.sin(angle)
+            )
+            x2 = (
+                TimeDisplay.ANALOG_WIDTH / 2
+                + 0.9 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(angle)
+            )
+            y2 = (
+                TimeDisplay.ANALOG_HEIGHT / 2
+                + 0.9 * TimeDisplay.ANALOG_HEIGHT / 2 * math.sin(angle)
+            )
             if i % 5 == 0:
                 self.time_canvas.create_line(
                     x1, y1, x2, y2, fill="black", width=3
@@ -119,15 +149,17 @@ class TimeDisplay:
 
         # Draw hour hand
         hour_angle = (hour + minute / 60) * math.pi / 6 - math.pi / 2
-        hour_x = ANALOG_WIDTH / 2 + 0.5 * ANALOG_WIDTH / 2 * math.cos(
-            hour_angle
+        hour_x = (
+            TimeDisplay.ANALOG_WIDTH / 2
+            + 0.5 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(hour_angle)
         )
-        hour_y = ANALOG_HEIGHT / 2 + 0.5 * ANALOG_HEIGHT / 2 * math.sin(
-            hour_angle
+        hour_y = (
+            TimeDisplay.ANALOG_HEIGHT / 2
+            + 0.5 * TimeDisplay.ANALOG_HEIGHT / 2 * math.sin(hour_angle)
         )
         self.time_canvas.create_line(
-            ANALOG_WIDTH / 2,
-            ANALOG_HEIGHT / 2,
+            TimeDisplay.ANALOG_WIDTH / 2,
+            TimeDisplay.ANALOG_HEIGHT / 2,
             hour_x,
             hour_y,
             fill="black",
@@ -136,15 +168,17 @@ class TimeDisplay:
 
         # Draw minute hand
         minute_angle = (minute + second / 60) * math.pi / 30 - math.pi / 2
-        minute_x = ANALOG_WIDTH / 2 + 0.7 * ANALOG_WIDTH / 2 * math.cos(
-            minute_angle
+        minute_x = (
+            TimeDisplay.ANALOG_WIDTH / 2
+            + 0.7 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(minute_angle)
         )
-        minute_y = ANALOG_HEIGHT / 2 + 0.7 * ANALOG_HEIGHT / 2 * math.sin(
-            minute_angle
+        minute_y = (
+            TimeDisplay.ANALOG_HEIGHT / 2
+            + 0.7 * TimeDisplay.ANALOG_HEIGHT / 2 * math.sin(minute_angle)
         )
         self.time_canvas.create_line(
-            ANALOG_WIDTH / 2,
-            ANALOG_HEIGHT / 2,
+            TimeDisplay.ANALOG_WIDTH / 2,
+            TimeDisplay.ANALOG_HEIGHT / 2,
             minute_x,
             minute_y,
             fill="black",
@@ -153,15 +187,17 @@ class TimeDisplay:
 
         # Draw second hand
         second_angle = second * math.pi / 30 - math.pi / 2
-        second_x = ANALOG_WIDTH / 2 + 0.6 * ANALOG_WIDTH / 2 * math.cos(
-            second_angle
+        second_x = (
+            TimeDisplay.ANALOG_WIDTH / 2
+            + 0.6 * TimeDisplay.ANALOG_WIDTH / 2 * math.cos(second_angle)
         )
-        second_y = ANALOG_HEIGHT / 2 + 0.6 * ANALOG_WIDTH / 2 * math.sin(
-            second_angle
+        second_y = (
+            TimeDisplay.ANALOG_HEIGHT / 2
+            + 0.6 * TimeDisplay.ANALOG_WIDTH / 2 * math.sin(second_angle)
         )
         self.time_canvas.create_line(
-            ANALOG_WIDTH / 2,
-            ANALOG_HEIGHT / 2,
+            TimeDisplay.ANALOG_WIDTH / 2,
+            TimeDisplay.ANALOG_HEIGHT / 2,
             second_x,
             second_y,
             fill="red",
