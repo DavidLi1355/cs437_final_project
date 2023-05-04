@@ -1,4 +1,3 @@
-import sys
 from tkinter import Tk, mainloop
 from src.time_display import TimeDisplay
 from src.alarm import Alarm
