@@ -11,7 +11,7 @@ from tkinter import (
     CENTER,
 )
 from datetime import datetime
-from threading import Thread, Lock
+from threading import Thread, Lock, Event
 from playsound import playsound
 
 
@@ -66,10 +66,15 @@ class Alarm:
         self.reset_button.place(relx=0.6, rely=0.85, anchor=CENTER)
         self.alarm_time = AlarmTime(0, 0, root)
 
+        self.event = Event()
         self.handler = Thread(
-            target=AlarmHandler.handler, args=(self.alarm_time,)
+            target=AlarmHandler.handler, args=(self.alarm_time, self.event)
         )
         self.handler.start()
+
+    def __del__(self):
+        self.event.set()
+        self.handler.join()
 
     def is_num_callback(self, P):
         if str.isdigit(P) or P == "":
@@ -95,18 +100,31 @@ class Alarm:
 
 
 class AlarmHandler:
+    CHECK_INTERVAL_SEC = 5
+
     @staticmethod
-    def handler(alarm_time: AlarmTime):
+    def handler(alarm_time: AlarmTime, event: Event):
         while True:
+            if event.isSet():
+                break
+
             if not alarm_time.on:
-                time.sleep(0.1)
+                AlarmHandler.sleep_sec()
                 continue
 
             curr_time = datetime.now().strftime("%H : %M")
             if curr_time != str(alarm_time):
-                time.sleep(0.1)
+                AlarmHandler.sleep_sec()
                 continue
 
             playsound("./resources/morning-clock-alarm.mp3", block=False)
             with Alarm.alarm_time_lock:
                 alarm_time.disable()
+
+    @staticmethod
+    def sleep_sec():
+        # sleep for CHECK_INTERVAL_SEC
+        time.sleep(
+            AlarmHandler.CHECK_INTERVAL_SEC
+            - time.time() % AlarmHandler.CHECK_INTERVAL_SEC
+        )
