@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Tk, Label, Canvas, StringVar, OptionMenu, CENTER
 from enum import Enum
 import time
 import math
