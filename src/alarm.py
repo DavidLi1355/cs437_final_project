@@ -2,12 +2,8 @@ import time
 from tkinter import (
     Tk,
     Button,
-    Text,
     Entry,
     Label,
-    Canvas,
-    StringVar,
-    OptionMenu,
     CENTER,
 )
 from datetime import datetime

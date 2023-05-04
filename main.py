@@ -18,4 +18,3 @@ mainloop()
 
 # clean up thread
 del alarm
-
