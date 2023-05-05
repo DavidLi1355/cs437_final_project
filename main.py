@@ -1,6 +1,7 @@
 from tkinter import Tk, mainloop
 from src.time_display import TimeDisplay
 from src.alarm import Alarm
+from src.speech_to_text import SpeechToText
 
 # setup root
 root = Tk()
@@ -13,7 +14,9 @@ time_display = TimeDisplay(root)
 time_display.get_time()
 alarm = Alarm(root)
 
-mainloop()
+speech_to_text = SpeechToText()
 
+mainloop()
+print("Hi")
 # clean up thread
 del alarm
