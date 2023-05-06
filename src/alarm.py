@@ -90,6 +90,14 @@ class Alarm:
             self.alarm_time.set_time(hour, minute)
             self.alarm_time.enable()
 
+    def set_alarm_from_speech(self, hour, minute):
+        if hour >= 24 or minute >= 60:
+            # handle error
+            return
+        with Alarm.alarm_time_lock:
+            self.alarm_time.set_time(hour, minute)
+            self.alarm_time.enable()
+
     def reset_alarm(self):
         with Alarm.alarm_time_lock:
             self.alarm_time.disable()
