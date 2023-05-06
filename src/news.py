@@ -44,5 +44,5 @@ class News:
         for idx, news in enumerate(self.news_list):
             if idx >= News.news_to_read:
                 break
-            news_to_read += news.title.text
+            news_to_read += str(idx + 1) + "\n" + news.title.text + "\n"
         self.work_queue.put(news_to_read)
