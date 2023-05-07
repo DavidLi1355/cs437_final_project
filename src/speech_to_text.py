@@ -2,6 +2,7 @@
 # speech to text and text to speech
 import speech_recognition as sr
 import threading
+from src.music import Music
 from src.alarm import Alarm
 from src.news import News
 from threading import Thread, Lock, Event
@@ -89,6 +90,7 @@ class SpeechToTextHandler:
     @staticmethod
     def play_music(words):
         print("Playing music...")
+        SpeechToText.music_obj.play_music_callback()
 
     @staticmethod
     def play_news(words):
@@ -98,6 +100,9 @@ class SpeechToTextHandler:
 
 class SpeechToText:
     alarm_obj: Alarm = None
+    music_obj: Music = None
+
+    def __init__(self, alarm: Alarm, music: Music) -> None:
     news_obj: News = None
 
     def __init__(self, alarm: Alarm, news: News) -> None:

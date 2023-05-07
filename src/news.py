@@ -1,16 +1,18 @@
-from tkinter import Tk, Button
+from tkinter import CENTER, Tk, Button
 import gtts
 from playsound import playsound
 from bs4 import BeautifulSoup as soup
 from urllib.request import urlopen
-from threading import Thread, Condition
+from threading import Thread, Event
 from queue import Queue
 
 
 class NewsHandler:
     @staticmethod
-    def read_news_handler(work_queue: Queue):
+    def read_news_handler(work_queue: Queue, event: Event):
         while True:
+            if event.isSet():
+                break
             news_to_read: str = work_queue.get()
             tts = gtts.gTTS(news_to_read)
             tts.save("news.mp3")
@@ -24,7 +26,7 @@ class News:
         self.play_button = Button(
             root, text="Play News", command=self.read_news_callback
         )
-        self.play_button.pack()
+        self.play_button.place(relx=0.7, rely=0.1, anchor=CENTER)
 
         self.news_url = "https://news.google.com/news/rss"
         self.Client = urlopen(self.news_url)
@@ -34,11 +36,21 @@ class News:
         self.soup_page = soup(self.xml_page, "xml")
         self.news_list = self.soup_page.findAll("item")
 
+        self.event = Event()
         self.work_queue = Queue()
         self.read_thread = Thread(
-            target=NewsHandler.read_news_handler, args=(self.work_queue,)
+            target=NewsHandler.read_news_handler,
+            args=(
+                self.work_queue,
+                self.event,
+            ),
         )
         self.read_thread.start()
+
+    def __del__(self):
+        self.event.set()
+        self.work_queue.put("")
+        self.read_thread.join()
 
     def read_news_callback(self):
         news_to_read = ""
