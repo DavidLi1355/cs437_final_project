@@ -24,7 +24,7 @@ if __name__ == "__main__":
     news = News(root)
     music = Music(root)
     # setup text to speech control
-    speech_to_text = SpeechToText(alarm)
+    speech_to_text = SpeechToText(alarm, music)
 
     my_thread = threading.Thread(
         target=run_server,
