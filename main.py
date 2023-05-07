@@ -6,6 +6,7 @@ from src.news import News
 
 import threading
 from server import run_server
+
 # setup root
 root = Tk()
 root.geometry("700x900")
@@ -19,12 +20,16 @@ time_display.get_time()
 alarm = Alarm(root, is_client=False)
 
 news = News(root)
-speech_to_text = SpeechToText(alarm)
+speech_to_text = SpeechToText(alarm, news)
 
-my_thread = threading.Thread(target=run_server, args=(time_display, alarm,))
+my_thread = threading.Thread(
+    target=run_server,
+    args=(
+        time_display,
+        alarm,
+    ),
+)
 my_thread.start()
-
-
 
 
 mainloop()

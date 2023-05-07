@@ -3,6 +3,7 @@
 import speech_recognition as sr
 import threading
 from src.alarm import Alarm
+from src.news import News
 from threading import Thread, Lock, Event
 
 
@@ -92,13 +93,16 @@ class SpeechToTextHandler:
     @staticmethod
     def play_news(words):
         print("Playing news...")
+        SpeechToText.news_obj.read_news_callback()
 
 
 class SpeechToText:
     alarm_obj: Alarm = None
+    news_obj: News = None
 
-    def __init__(self, alarm: Alarm) -> None:
+    def __init__(self, alarm: Alarm, news: News) -> None:
         SpeechToText.alarm_obj = alarm
+        SpeechToText.news_obj = news
 
         self.recognizer = sr.Recognizer()
         self.handler = threading.Thread(
