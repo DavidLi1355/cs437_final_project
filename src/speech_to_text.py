@@ -101,9 +101,6 @@ class SpeechToTextHandler:
 
 class SpeechToText:
     alarm_obj: Alarm = None
-    music_obj: Music = None
-
-    def __init__(self, alarm: Alarm, music: Music) -> None:
     news_obj: News = None
     music_obj: Music = None
 
