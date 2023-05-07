@@ -224,3 +224,4 @@ class TimeDisplay:
 
     def set_socket(self, socket):
         self.socket = socket
+
