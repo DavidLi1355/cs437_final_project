@@ -11,6 +11,7 @@ from threading import Thread, Lock, Event
 from playsound import playsound
 import socket
 
+
 class AlarmTime:
     def __init__(self, hour, minute, root) -> None:
         self.root = root
@@ -94,13 +95,15 @@ class Alarm:
             self.alarm_time.enable()
         # if instance is a client, post changes to server
         if self.is_client:
-            message = 'SET_ALARM ' + self.hour_text.get() + ' ' + self.minute_text.get() + '\n'
+            message = (
+                "SET_ALARM "
+                + self.hour_text.get()
+                + " "
+                + self.minute_text.get()
+                + "\n"
+            )
             print(message)
             self.socket.sendall(message.encode())
-
-
-
-
 
     def set_alarm_from_speech(self, hour, minute):
         if hour >= 24 or minute >= 60:
@@ -114,13 +117,13 @@ class Alarm:
         with Alarm.alarm_time_lock:
             self.alarm_time.disable()
             if self.is_client:
-                message = 'RESET_ALARM' + '\n'
+                message = "RESET_ALARM" + "\n"
                 print(message)
                 self.socket.sendall(message.encode())
 
-
     def set_socket(self, socket):
         self.socket = socket
+
 
 class AlarmHandler:
     CHECK_INTERVAL_SEC = 5

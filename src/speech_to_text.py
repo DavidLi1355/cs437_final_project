@@ -2,6 +2,7 @@
 # speech to text and text to speech
 import speech_recognition as sr
 import threading
+from src.music import Music
 from src.alarm import Alarm
 from src.news import News
 from src.music import Music
@@ -100,6 +101,9 @@ class SpeechToTextHandler:
 
 class SpeechToText:
     alarm_obj: Alarm = None
+    music_obj: Music = None
+
+    def __init__(self, alarm: Alarm, music: Music) -> None:
     news_obj: News = None
     music_obj: Music = None
 
