@@ -56,14 +56,14 @@ class TimeDisplay:
         self.selected_format.set(self.current_format.value)
         options = [f.value for f in TimeFormat]
         self.menu_format = OptionMenu(root, self.selected_format, *options)
-        self.menu_format.pack()
+        self.menu_format.place(relx=0.4, rely=0.05, anchor=CENTER)
 
         # drop down menu for color
         self.selected_color = StringVar()
         self.selected_color.set(self.current_color.name)
         options = [f.name for f in TimeColor]
         self.menu_color = OptionMenu(root, self.selected_color, *options)
-        self.menu_color.pack()
+        self.menu_color.place(relx=0.6, rely=0.05, anchor=CENTER)
 
     def get_time(self):
         self.current_format = TimeFormat(self.selected_format.get())

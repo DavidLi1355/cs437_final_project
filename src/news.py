@@ -1,4 +1,4 @@
-from tkinter import Tk, Button
+from tkinter import CENTER, Tk, Button
 import gtts
 from playsound import playsound
 from bs4 import BeautifulSoup as soup
@@ -24,7 +24,7 @@ class News:
         self.play_button = Button(
             root, text="Play News", command=self.read_news_callback
         )
-        self.play_button.pack()
+        self.play_button.place(relx=0.7, rely=0.1, anchor=CENTER)
 
         self.news_url = "https://news.google.com/news/rss"
         self.Client = urlopen(self.news_url)
