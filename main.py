@@ -52,9 +52,9 @@ if __name__ == "__main__":
 time_display = TimeDisplay(root, is_client=False)
 time_display.get_time()
 alarm = Alarm(root, is_client=False)
-
 news = News(root)
-speech_to_text = SpeechToText(alarm, news)
+music = Music(root)
+speech_to_text = SpeechToText(alarm, news, music)
 
 my_thread = threading.Thread(
     target=run_server,

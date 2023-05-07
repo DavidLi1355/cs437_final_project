@@ -5,8 +5,6 @@ import multiprocessing
 
 
 class Music:
-    news_to_read = 3
-
     def __init__(self, root: Tk):
         self.play_button = Button(
             root, text="Play Music", command=self.play_music_callback

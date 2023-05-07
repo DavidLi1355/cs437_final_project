@@ -5,6 +5,7 @@ import threading
 from src.music import Music
 from src.alarm import Alarm
 from src.news import News
+from src.music import Music
 from threading import Thread, Lock, Event
 
 
@@ -104,10 +105,12 @@ class SpeechToText:
 
     def __init__(self, alarm: Alarm, music: Music) -> None:
     news_obj: News = None
+    music_obj: Music = None
 
-    def __init__(self, alarm: Alarm, news: News) -> None:
+    def __init__(self, alarm: Alarm, news: News, music: Music) -> None:
         SpeechToText.alarm_obj = alarm
         SpeechToText.news_obj = news
+        SpeechToText.music_obj = music
 
         self.recognizer = sr.Recognizer()
         self.handler = threading.Thread(
