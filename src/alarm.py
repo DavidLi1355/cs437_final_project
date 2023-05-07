@@ -9,7 +9,7 @@ from tkinter import (
 from datetime import datetime
 from threading import Thread, Lock, Event
 from playsound import playsound
-
+import socket
 
 class AlarmTime:
     def __init__(self, hour, minute, root) -> None:
@@ -40,8 +40,11 @@ class AlarmTime:
 class Alarm:
     alarm_time_lock = Lock()
 
-    def __init__(self, root: Tk) -> None:
+    def __init__(self, root: Tk, is_client: bool) -> None:
         self.root = root
+        self.is_client = is_client
+        self.socket = None
+
         vcmd = root.register(self.is_num_callback)
         self.hour_text = Entry(
             root, validate="all", validatecommand=(vcmd, "%P"), width=2
@@ -89,6 +92,15 @@ class Alarm:
         with Alarm.alarm_time_lock:
             self.alarm_time.set_time(hour, minute)
             self.alarm_time.enable()
+        # if instance is a client, post changes to server
+        if self.is_client:
+            message = 'SET_ALARM ' + self.hour_text.get() + ' ' + self.minute_text.get() + '\n'
+            print(message)
+            self.socket.sendall(message.encode())
+
+
+
+
 
     def set_alarm_from_speech(self, hour, minute):
         if hour >= 24 or minute >= 60:
@@ -101,7 +113,14 @@ class Alarm:
     def reset_alarm(self):
         with Alarm.alarm_time_lock:
             self.alarm_time.disable()
+            if self.is_client:
+                message = 'RESET_ALARM' + '\n'
+                print(message)
+                self.socket.sendall(message.encode())
 
+
+    def set_socket(self, socket):
+        self.socket = socket
 
 class AlarmHandler:
     CHECK_INTERVAL_SEC = 5

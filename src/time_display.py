@@ -2,6 +2,7 @@ from tkinter import Tk, Label, Canvas, StringVar, OptionMenu, CENTER
 from enum import Enum
 import time
 import math
+import socket
 
 
 class TimeFormat(Enum):
@@ -23,9 +24,19 @@ class TimeDisplay:
     ANALOG_WIDTH = 400
     ANALOG_HEIGHT = 400
 
-    def __init__(self, root: Tk) -> None:
+    def __init__(self, root: Tk, is_client: bool) -> None:
         self.current_format = TimeFormat.Military_Time
         self.current_color = TimeColor.Black
+        self.is_client = is_client
+        self.socket = None
+
+
+        # if self.is_client:
+        #     HOST = 'localhost'  # The server's hostname or IP address
+        #     PORT = 5000  # The port used by the server
+        #     self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #     self.socket.connect((HOST, PORT))
+
 
         # digital
         self.time_label: Label = Label(
@@ -57,6 +68,13 @@ class TimeDisplay:
     def get_time(self):
         self.current_format = TimeFormat(self.selected_format.get())
         self.current_color = TimeColor[self.selected_color.get()]
+        #
+        if self.is_client and self.socket:
+            message = 'FORMAT ' + self.current_format.value + '\n'
+            self.socket.sendall(message.encode())
+            message = 'COLOR ' + self.current_color.name + '\n'
+            self.socket.sendall(message.encode())
+
 
         if (
             self.current_format == TimeFormat.Military_Time
@@ -80,7 +98,7 @@ class TimeDisplay:
             )
             self.update_analog_clock()
 
-        self.time_label.after(1, self.get_time)
+        self.time_label.after(100, self.get_time)
 
     def update_analog_clock(self):
         self.time_canvas.delete("all")
@@ -203,3 +221,6 @@ class TimeDisplay:
             fill="red",
             width=2,
         )
+
+    def set_socket(self, socket):
+        self.socket = socket
