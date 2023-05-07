@@ -25,6 +25,7 @@ class News:
             root, text="Play News", command=self.read_news_callback
         )
         self.play_button.pack()
+
         self.news_url = "https://news.google.com/news/rss"
         self.Client = urlopen(self.news_url)
         self.xml_page = self.Client.read()

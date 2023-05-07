@@ -15,8 +15,8 @@ time_display = TimeDisplay(root)
 time_display.get_time()
 alarm = Alarm(root)
 
-speech_to_text = SpeechToText()
 news = News(root)
+speech_to_text = SpeechToText(alarm)
 
 mainloop()
 print("Hi")
