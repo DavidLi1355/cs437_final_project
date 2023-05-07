@@ -36,8 +36,9 @@ if __name__ == "__main__":
     my_thread.start()
 
     mainloop()
-    print("Hi")
     # Wait for the thread to complete
     my_thread.join()
+
     # clean up thread
     del alarm
+    del news
